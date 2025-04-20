@@ -1,71 +1,77 @@
 import React, { createContext, useEffect, useState } from "react";
 
-
 export const ShopContext = createContext(null);
+
 const getDefaultCart = () => {
   let cart = {};
-  for (let index = 0; index < 300 + 1; index++) {
+  for (let index = 0; index <= 300; index++) {
     cart[index] = 0;
   }
   return cart;
 };
-const ShopContextProvider = (props) => {
 
-  const [all_product, setAll_Product] = useState([])
+// ✅ Use the environment variable
+const BASE_URL = process.env.REACT_APP_API_URL;
+
+const ShopContextProvider = (props) => {
+  const [all_product, setAll_Product] = useState([]);
   const [cartItems, setCartItems] = useState(getDefaultCart());
 
-  useEffect(()=>{
-      fetch('http://localhost:4000/allproducts').then((response)=>response.json()).then((data)=>setAll_Product(data))
+  useEffect(() => {
+    fetch(`${BASE_URL}/allproducts`)
+      .then((response) => response.json())
+      .then((data) => setAll_Product(data));
 
-      if(localStorage.getItem('auth-token')){
-        fetch('http://localhost:4000/getcart', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'auth-token': `${localStorage.getItem('auth-token')}`,
-            'Content-Type': 'application/json',
-
-          },
-          
-        }).then((response)=>response.json()).then((data)=>setCartItems(data))
-      }
-  },[])
-
-  const addToCart = (itemid) => {
-    setCartItems((prev) => ({ ...prev, [itemid]: (prev[itemid] || 0) + 1 }));
-    
-    if (localStorage.getItem('auth-token')) {
-      fetch('http://localhost:4000/addtocart', {
-        method: 'POST',
+    if (localStorage.getItem("auth-token")) {
+      fetch(`${BASE_URL}/getcart`, {
+        method: "POST",
         headers: {
-          'Accept': 'application/json',                       
-          'auth-token': `${localStorage.getItem('auth-token')}`,
-          'Content-Type': 'application/json',
+          Accept: "application/json",
+          "auth-token": `${localStorage.getItem("auth-token")}`,
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ 'itemid': itemid })           
       })
         .then((response) => response.json())
-        // .then((data) => console.log(data))   
-        .catch((error) => console.error("Error:", error));   
+        .then((data) => setCartItems(data));
+    }
+  }, []);
+
+  const addToCart = (itemid) => {
+    setCartItems((prev) => ({
+      ...prev,
+      [itemid]: (prev[itemid] || 0) + 1,
+    }));
+
+    if (localStorage.getItem("auth-token")) {
+      fetch(`${BASE_URL}/addtocart`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "auth-token": `${localStorage.getItem("auth-token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ itemid }),
+      }).catch((error) => console.error("Error:", error));
     }
   };
-  
-  
+
   const removeFromCart = (itemid) => {
-    setCartItems((prev) => ({ ...prev, [itemid]: prev[itemid] - 1 }));
-    fetch('http://localhost:4000/removefromcart', {
-      method: 'POST',
+    setCartItems((prev) => ({
+      ...prev,
+      [itemid]: prev[itemid] - 1,
+    }));
+
+    fetch(`${BASE_URL}/removefromcart`, {
+      method: "POST",
       headers: {
-        'Accept': 'application/json',                       
-        'auth-token': `${localStorage.getItem('auth-token')}`,
-        'Content-Type': 'application/json',
+        Accept: "application/json",
+        "auth-token": `${localStorage.getItem("auth-token")}`,
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ 'itemid': itemid })           
-    })
-      .then((response) => response.json())
-      // .then((data) => console.log(data))
-      .catch((error) => console.error("Error:", error));
+      body: JSON.stringify({ itemid }),
+    }).catch((error) => console.error("Error:", error));
   };
+
   const getTotalCartAmount = () => {
     let totalAmount = 0;
     for (const item in cartItems) {
@@ -78,27 +84,26 @@ const ShopContextProvider = (props) => {
         }
       }
     }
-    
-    return totalAmount.toFixed(2); 
+    return totalAmount.toFixed(2);
   };
-  const getTotalCartItem = () =>{
+
+  const getTotalCartItem = () => {
     let totalItem = 0;
-    for(const item in cartItems)
-    {
-      if(cartItems[item] > 0){
+    for (const item in cartItems) {
+      if (cartItems[item] > 0) {
         totalItem += cartItems[item];
       }
     }
-    return totalItem
-  }
-  
+    return totalItem;
+  };
+
   const contextValue = {
     getTotalCartAmount,
     all_product,
     cartItems,
     addToCart,
     removeFromCart,
-    getTotalCartItem
+    getTotalCartItem,
   };
 
   return (
