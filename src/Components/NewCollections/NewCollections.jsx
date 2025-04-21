@@ -8,7 +8,7 @@ const NewCollections = () => {
   const BASE_URL = process.env.REACT_APP_API_URL;
 
   useEffect(()=>{
-    fetch('${BASE_URL}/newcollection')
+    fetch(`${BASE_URL}/newcollection`)
     .then(response => response.json())
     .then(data => setNew_collection(data))
   },[])
