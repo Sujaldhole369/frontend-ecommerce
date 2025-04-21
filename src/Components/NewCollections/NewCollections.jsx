@@ -5,10 +5,9 @@ import Item from '../Item/Item'
 const NewCollections = () => {
 
   const [new_collection, setNew_collection] = useState([]);
-  const BASE_URL = process.env.REACT_APP_API_URL;
 
   useEffect(()=>{
-    fetch(`${BASE_URL}/newcollection`)
+    fetch('http://localhost:4000/newcollection')
     .then(response => response.json())
     .then(data => setNew_collection(data))
   },[])
