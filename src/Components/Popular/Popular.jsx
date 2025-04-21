@@ -5,10 +5,9 @@ import Item from '../Item/Item'
 const Popular = () => {
 
   const [popularProducts, setPopularProducts] = React.useState([])
-  const BASE_URL = process.env.REACT_APP_API_URL;
 
   useEffect(()=>{
-    fetch('${BASE_URL}/popularinwomen')
+    fetch('http://localhost:4000/popularinwomen')
     .then((response) => response.json())  
     .then((data) => setPopularProducts(data))
   },[])
