@@ -11,19 +11,19 @@ const getDefaultCart = () => {
 };
 
 // ✅ Use the environment variable
-const BASE_URL = process.env.REACT_APP_API_URL;
+const backendURL = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
 
 const ShopContextProvider = (props) => {
   const [all_product, setAll_Product] = useState([]);
   const [cartItems, setCartItems] = useState(getDefaultCart());
 
   useEffect(() => {
-    fetch(`https://backend-ecommerce-90ji.onrender.com/allproducts`)
+    fetch(`${backendURL}/allproducts`)
       .then((response) => response.json())
       .then((data) => setAll_Product(data));
 
     if (localStorage.getItem("auth-token")) {
-      fetch(`${BASE_URL}/getcart`, {
+      fetch(`${backendURL}/getcart`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -43,7 +43,7 @@ const ShopContextProvider = (props) => {
     }));
 
     if (localStorage.getItem("auth-token")) {
-      fetch(`https://backend-ecommerce-90ji.onrender.com/addtocart`, {
+      fetch(`${backendURL}/addtocart`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -61,7 +61,7 @@ const ShopContextProvider = (props) => {
       [itemid]: prev[itemid] - 1,
     }));
 
-    fetch(`https://backend-ecommerce-90ji.onrender.com/removefromcart`, {
+    fetch(`${backendURL}/removefromcart`, {
       method: "POST",
       headers: {
         Accept: "application/json",
