@@ -5,9 +5,10 @@ import Item from '../Item/Item'
 const NewCollections = () => {
 
   const [new_collection, setNew_collection] = useState([]);
+  const backendURL = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
 
   useEffect(()=>{
-    fetch('https://backend-ecommerce-90ji.onrender.com/newcollection')
+    fetch(`${backendURL}/newcollection`)
     .then(response => response.json())
     .then(data => setNew_collection(data))
   },[])
