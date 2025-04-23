@@ -17,6 +17,7 @@ const LoginSignup = () => {
 
     let responseData;
     const backendURL = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+    console.log("Current backend URL:", backendURL);
     await fetch(`${backendURL}/login`,{
       method: 'POST',
       headers: {
