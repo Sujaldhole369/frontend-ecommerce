@@ -4,10 +4,11 @@ import Item from '../Item/Item'
 
 const Popular = () => {
 
-  const [popularProducts, setPopularProducts] = React.useState([])
+  const [popularProducts, setPopularProducts] = React.useState([]);
+  const backendURL = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
 
   useEffect(()=>{
-    fetch('https://backend-ecommerce-90ji.onrender.com/popularinwomen')
+    fetch(`${backendURL}/popularinwomen`)
     .then((response) => response.json())  
     .then((data) => setPopularProducts(data))
   },[])
