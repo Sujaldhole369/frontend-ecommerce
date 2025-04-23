@@ -18,7 +18,7 @@ const ShopContextProvider = (props) => {
   const [cartItems, setCartItems] = useState(getDefaultCart());
 
   useEffect(() => {
-    fetch(`${BASE_URL}/allproducts`)
+    fetch(`https://backend-ecommerce-90ji.onrender.com/allproducts`)
       .then((response) => response.json())
       .then((data) => setAll_Product(data));
 
@@ -43,7 +43,7 @@ const ShopContextProvider = (props) => {
     }));
 
     if (localStorage.getItem("auth-token")) {
-      fetch(`${BASE_URL}/addtocart`, {
+      fetch(`https://backend-ecommerce-90ji.onrender.com/addtocart`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -61,7 +61,7 @@ const ShopContextProvider = (props) => {
       [itemid]: prev[itemid] - 1,
     }));
 
-    fetch(`${BASE_URL}/removefromcart`, {
+    fetch(`https://backend-ecommerce-90ji.onrender.com/removefromcart`, {
       method: "POST",
       headers: {
         Accept: "application/json",
