@@ -39,6 +39,7 @@ const LoginSignup = () => {
   const signup = async () => {
     console.log("Sign Up function executed", formData)
     let responseData;
+    const backendURL = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
     await fetch(`${backendURL}/signup`,{
       method: 'POST',
       headers: {
